@@ -15,7 +15,7 @@
 package unicode
 
 import (
-	"github.com/blevesearch/segment"
+	"github.com/blugelabs/segment"
 
 	"github.com/blugelabs/bleve/analysis"
 	"github.com/blugelabs/bleve/registry"
