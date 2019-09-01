@@ -21,7 +21,7 @@ import (
 	"github.com/RoaringBitmap/roaring"
 	"github.com/blugelabs/bleve/index"
 	"github.com/blugelabs/bleve/index/scorch/segment"
-	"github.com/blugelabs/bleve/index/scorch/segment/zap"
+	"github.com/blugelabs/zap"
 )
 
 type segmentWrapperNew func(results []*index.AnalysisResult,
