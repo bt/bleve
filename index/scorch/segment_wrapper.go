@@ -21,7 +21,8 @@ import (
 	"github.com/RoaringBitmap/roaring"
 	"github.com/blugelabs/bleve/index"
 	"github.com/blugelabs/bleve/index/scorch/segment"
-	"github.com/blugelabs/zap/v2"
+	zapv2 "github.com/blugelabs/zap/v2"
+	"github.com/blugelabs/zap"
 )
 
 type segmentWrapperNew func(results []*index.AnalysisResult,
@@ -71,6 +72,17 @@ func init() {
 				IsDocNum1HitFinished:       zap.IsDocNum1HitFinished,
 				PostingsIteratorFromBitmap: zap.PostingsIteratorFromBitmap,
 				PostingsIteratorFrom1Hit:   zap.PostingsIteratorFrom1Hit,
+			},
+			zapv2.Version: &segmentWrapper{
+				Type:                       zapv2.Type,
+				Version:                    zapv2.Version,
+				New:                        zapv2.AnalysisResultsToSegmentBase,
+				Open:                       zapv2.Open,
+				Merge:                      zapv2.Merge,
+				ValidateMerge:              zapv2.ValidateMerge,
+				IsDocNum1HitFinished:       zapv2.IsDocNum1HitFinished,
+				PostingsIteratorFromBitmap: zapv2.PostingsIteratorFromBitmap,
+				PostingsIteratorFrom1Hit:   zapv2.PostingsIteratorFrom1Hit,
 			},
 		},
 	}
