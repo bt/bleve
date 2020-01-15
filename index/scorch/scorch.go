@@ -104,6 +104,23 @@ func NewScorch(storeName string,
 		ineligibleForRemoval: map[string]bool{},
 		segWrapper:           defaultSegmentTypeVersion,
 	}
+	forcedSegmentVersion, ok := config["forceSegmentVersion"].(int)
+	if ok {
+		forcedSegmentType, ok2 := config["forceSegmentType"].(string)
+		if !ok2 {
+			return nil, fmt.Errorf("to forceSegementVersion, must also forceSegmentType")
+		}
+
+		if versions, ok := supportedSegmentTypeVersions[forcedSegmentType]; ok {
+			if segWrapper, ok := versions[uint32(forcedSegmentVersion)]; ok {
+				rv.segWrapper = segWrapper
+			} else {
+				return nil, fmt.Errorf("unsupported version %d for segment type: %s, known: %#v", forcedSegmentVersion, forcedSegmentType, versions)
+			}
+		} else {
+			return nil, fmt.Errorf("unsupported segment type: %s", forcedSegmentType)
+		}
+	}
 	rv.root = &IndexSnapshot{parent: rv, refs: 1, creator: "NewScorch"}
 	ro, ok := config["read_only"].(bool)
 	if ok {

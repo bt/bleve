@@ -2011,3 +2011,32 @@ func TestAllFieldWithDifferentTermVectorsEnabled(t *testing.T) {
 		t.Errorf("Error updating index: %v", err)
 	}
 }
+
+func TestForceVersion(t *testing.T) {
+	cfg := map[string]interface{}{}
+	cfg["forceSegmentType"] = "zap"
+	cfg["forceSegmentVersion"] = 11
+	analysisQueue := index.NewAnalysisQueue(1)
+	idx, err := NewScorch(Name, cfg, analysisQueue)
+	if err != nil {
+		t.Fatalf("error opening a supported vesion: %v", err)
+	}
+	s := idx.(*Scorch)
+	if s.segWrapper.Version != 11 {
+		t.Fatalf("wrong segment wrapper version loaded, expected %d got %d", 11, s.segWrapper.Version)
+	}
+	cfg["forceSegmentVersion"] = 12
+	idx, err = NewScorch(Name, cfg, analysisQueue)
+	if err != nil {
+		t.Fatalf("error opening a supported vesion: %v", err)
+	}
+	s = idx.(*Scorch)
+	if s.segWrapper.Version != 12 {
+		t.Fatalf("wrong segment wrapper version loaded, expected %d got %d", 12, s.segWrapper.Version)
+	}
+	cfg["forceSegmentVersion"] = 10
+	idx, err = NewScorch(Name, cfg, analysisQueue)
+	if err == nil {
+		t.Fatalf("expected an error opening an unsupported vesion, got nil")
+	}
+}
